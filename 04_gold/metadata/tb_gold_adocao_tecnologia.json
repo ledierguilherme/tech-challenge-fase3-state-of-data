@@ -1,0 +1,242 @@
+{
+  "tabela": "workspace.tb_gold_adocao_tecnologia",
+  "location": "s3://614133392546-lab/data-output/gold/state-of-data/adocao_tecnologia/",
+  "origem": "workspace.tb_state_of_data_silver",
+  "gerado_em": "2026-09-13T04:26:23.822879+00:00",
+  "pergunta_respondida": "Quais linguagens são usadas no dia a dia (2023-2024) e quais são preferidas (2023-2025), e como a adoção evolui?",
+  "particao": "ano_pesquisa",
+  "qtd_linhas": 60,
+  "schema": [
+    {
+      "coluna": "tecnologia",
+      "tipo": "string",
+      "descricao": "sufixo de tec_usa_*/tec_pref_* ou id mapeado do texto livre (ex.: python, sql, c_cpp_csharp)"
+    },
+    {
+      "coluna": "tipo_metrica",
+      "tipo": "string",
+      "descricao": "'uso_dia_a_dia' (2023/2024) ou 'preferida' (2023-2025)"
+    },
+    {
+      "coluna": "fonte",
+      "tipo": "string",
+      "descricao": "coluna da Silver de origem (tec_usa_*, tec_pref_*, tec_pref_normalizada) - documenta a mudança de fonte entre edições"
+    },
+    {
+      "coluna": "ano_pesquisa",
+      "tipo": "int",
+      "descricao": "edição (partição)"
+    },
+    {
+      "coluna": "contagem_true",
+      "tipo": "bigint",
+      "descricao": "respondentes com true (booleanos) ou com a categoria (texto normalizado)"
+    },
+    {
+      "coluna": "total_respondentes",
+      "tipo": "bigint",
+      "descricao": "não nulos na coluna/ano (booleanos) ou não nulos em tec_pref_normalizada/ano"
+    },
+    {
+      "coluna": "percentual",
+      "tipo": "double",
+      "descricao": "contagem_true / total_respondentes"
+    },
+    {
+      "coluna": "amostra_baixa",
+      "tipo": "boolean",
+      "descricao": "contagem_true < 30"
+    }
+  ],
+  "regras": {
+    "uso_dia_a_dia": "só 2023/2024 (a pergunta não existe em 2025); tec_usa_dax não existe na Silver",
+    "preferida_2025": "booleanos tec_pref_* (multi-select)",
+    "preferida_2023_2024": "top-10 de tec_pref_normalizada (resposta única em texto livre normalizado) - fonte de natureza diferente da de 2025; coluna 'fonte' documenta",
+    "nota_metodologica": "A partir de 2025 a pesquisa não repete 'linguagens usadas no dia a dia'; 2025 é reportado só como 'preferida'."
+  },
+  "validacao_esperada": "tec_usa_python 2825/2935 (2023/2024), tec_pref_python 1929 (2025); totais 3772/3589/2096",
+  "drift": [],
+  "top_pref_normalizada": [
+    "Python",
+    "R",
+    "SQL",
+    "Scala",
+    "Rust",
+    "C/C++/C#",
+    "Julia",
+    "Outra",
+    "Go",
+    "DAX/M"
+  ],
+  "amostra_baixa_casos": [
+    {
+      "tecnologia": "nenhuma",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_nenhuma",
+      "ano_pesquisa": 2025,
+      "contagem": 0
+    },
+    {
+      "tecnologia": "vba",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_vba",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "tecnologia": "dax",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_normalizada",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "tecnologia": "go",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_normalizada",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "tecnologia": "julia",
+      "tipo_metrica": "uso_dia_a_dia",
+      "fonte": "tec_usa_julia",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "tecnologia": "rust",
+      "tipo_metrica": "uso_dia_a_dia",
+      "fonte": "tec_usa_rust",
+      "ano_pesquisa": 2023,
+      "contagem": 7
+    },
+    {
+      "tecnologia": "dax",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_dax",
+      "ano_pesquisa": 2025,
+      "contagem": 8
+    },
+    {
+      "tecnologia": "julia",
+      "tipo_metrica": "uso_dia_a_dia",
+      "fonte": "tec_usa_julia",
+      "ano_pesquisa": 2023,
+      "contagem": 8
+    },
+    {
+      "tecnologia": "julia",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_normalizada",
+      "ano_pesquisa": 2024,
+      "contagem": 8
+    },
+    {
+      "tecnologia": "dax",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_normalizada",
+      "ano_pesquisa": 2023,
+      "contagem": 8
+    },
+    {
+      "tecnologia": "outra",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_normalizada",
+      "ano_pesquisa": 2023,
+      "contagem": 8
+    },
+    {
+      "tecnologia": "go",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_normalizada",
+      "ano_pesquisa": 2024,
+      "contagem": 10
+    },
+    {
+      "tecnologia": "rust",
+      "tipo_metrica": "uso_dia_a_dia",
+      "fonte": "tec_usa_rust",
+      "ano_pesquisa": 2024,
+      "contagem": 12
+    },
+    {
+      "tecnologia": "outra",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_normalizada",
+      "ano_pesquisa": 2024,
+      "contagem": 17
+    },
+    {
+      "tecnologia": "julia",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_julia",
+      "ano_pesquisa": 2025,
+      "contagem": 18
+    },
+    {
+      "tecnologia": "c_cpp_csharp",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_normalizada",
+      "ano_pesquisa": 2023,
+      "contagem": 19
+    },
+    {
+      "tecnologia": "matlab",
+      "tipo_metrica": "uso_dia_a_dia",
+      "fonte": "tec_usa_matlab",
+      "ano_pesquisa": 2024,
+      "contagem": 20
+    },
+    {
+      "tecnologia": "c_cpp_csharp",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_normalizada",
+      "ano_pesquisa": 2024,
+      "contagem": 20
+    },
+    {
+      "tecnologia": "julia",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_normalizada",
+      "ano_pesquisa": 2023,
+      "contagem": 24
+    },
+    {
+      "tecnologia": "rust",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_normalizada",
+      "ano_pesquisa": 2024,
+      "contagem": 25
+    },
+    {
+      "tecnologia": "rust",
+      "tipo_metrica": "preferida",
+      "fonte": "tec_pref_normalizada",
+      "ano_pesquisa": 2023,
+      "contagem": 29
+    }
+  ],
+  "referencias": {
+    "tec_usa_python|2024": {
+      "contagem_true": 2935,
+      "total_respondentes": 3589
+    },
+    "tec_usa_sql|2024": {
+      "contagem_true": 3146,
+      "total_respondentes": 3589
+    },
+    "tec_usa_python|2023": {
+      "contagem_true": 2825,
+      "total_respondentes": 3772
+    },
+    "tec_usa_sql|2023": {
+      "contagem_true": 3156,
+      "total_respondentes": 3772
+    },
+    "tec_pref_python|2025": {
+      "contagem_true": 1929,
+      "total_respondentes": 2096
+    }
+  }
+}

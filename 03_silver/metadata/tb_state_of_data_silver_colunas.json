@@ -1,0 +1,1184 @@
+{
+  "tabela": "workspace.tb_state_of_data_silver",
+  "nota_metodologica": "A partir de 2025, a pesquisa não repete a pergunta 'linguagens usadas no dia a dia' (substituída por 'linguagem preferida', de natureza diferente) - comparação de adoção de tecnologia 2023->2025 fica limitada a 2023-2024; 2025 é reportado separadamente como 'linguagem preferida' (tec_pref_*).",
+  "location": "s3://614133392546-lab/data-output/silver/state-of-data/",
+  "particao": "ano_pesquisa",
+  "origens": {
+    "2023": "workspace.tb_pesquisa_2023_bronze",
+    "2024": "workspace.tb_pesquisa_2024_bronze",
+    "2025": "workspace.tb_pesquisa_2025_bronze"
+  },
+  "total_colunas": 79,
+  "regex_codigo_pergunta": "^([A-Za-z]?(\\d+)(?:_[A-Za-z]{1,2})?(?:_\\d+)*)_(.+)$",
+  "colunas": {
+    "id_resposta": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": {
+        "2023": "P0_id",
+        "2024": "0_a_token",
+        "2025": "0_a_token"
+      },
+      "regra": "mapeamento explícito por nome (COLUMN_MAPPING)"
+    },
+    "genero": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": {
+        "2023": "P1_b_Genero",
+        "2024": "1_b_genero",
+        "2025": "1_b_genero"
+      },
+      "regra": "mapeamento explícito por nome (COLUMN_MAPPING)"
+    },
+    "cor_raca_etnia": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": {
+        "2023": "P1_c_Cor_raca_etnia",
+        "2024": "1_c_cor_raca_etnia",
+        "2025": "1_c_cor_raca_etnia"
+      },
+      "regra": "mapeamento explícito por nome (COLUMN_MAPPING)"
+    },
+    "uf_onde_mora": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": {
+        "2023": "P1_i_1_uf_onde_mora",
+        "2024": "1_i_1_uf_onde_mora",
+        "2025": "1_i_1_uf_onde_mora"
+      },
+      "regra": "mapeamento explícito por nome (COLUMN_MAPPING)"
+    },
+    "regiao_onde_mora": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": {
+        "2023": "P1_i_2_Regiao_onde_mora",
+        "2024": "1_i_2_regiao_onde_mora",
+        "2025": "1_i_2_regiao_onde_mora"
+      },
+      "regra": "mapeamento explícito por nome (COLUMN_MAPPING)"
+    },
+    "nivel_ensino": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": {
+        "2023": "P1_l_Nivel_de_Ensino",
+        "2024": "1_l_nivel_de_ensino",
+        "2025": "1_l_nivel_de_ensino"
+      },
+      "regra": "mapeamento explícito por nome (COLUMN_MAPPING)"
+    },
+    "area_formacao": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": {
+        "2023": "P1_m_Área_de_Formação",
+        "2024": "1_m_área_de_formação",
+        "2025": "1_m_área_de_formação"
+      },
+      "regra": "mapeamento explícito por nome (COLUMN_MAPPING)"
+    },
+    "cargo_atual": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": {
+        "2023": "P2_f_Cargo_Atual",
+        "2024": "2_f_cargo_atual",
+        "2025": "2_f_cargo_atual"
+      },
+      "regra": "mapeamento explícito por nome (COLUMN_MAPPING)"
+    },
+    "cargo_atual_agrupado": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": "derivada de cargo_atual",
+      "regra": {
+        "variantes": [
+          "Engenheiro de Dados/Arquiteto de Dados/Data Engineer/Data Architect",
+          "Engenheiro de Dados/Data Engineer/Data Architect",
+          "Arquiteto de Dados/Data Architect"
+        ],
+        "rotulo_unico": "Engenheiro de Dados/Arquiteto de Dados",
+        "demais": "mantidos (incluindo NULL)"
+      },
+      "nota": "cargo_atual_agrupado harmoniza a fusão/separação de 'Engenheiro de Dados' e 'Arquiteto de Dados' entre edições da pesquisa (unidos em 2023, separados a partir de 2024)"
+    },
+    "nivel_senioridade": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": {
+        "2023": "P2_g_Nivel",
+        "2024": "2_g_nivel",
+        "2025": "2_g_nivel"
+      },
+      "regra": "mapeamento explícito por nome (COLUMN_MAPPING)"
+    },
+    "nivel_senioridade_agrupada": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": "derivada de nivel_senioridade",
+      "regra": "'Especialista/Staff+' -> 'Sênior'; demais valores mantidos"
+    },
+    "faixa_salarial": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": {
+        "2023": "P2_h_Faixa_salarial",
+        "2024": "2_h_faixa_salarial",
+        "2025": "2_h_faixa_salarial"
+      },
+      "regra": "mapeamento explícito por nome (COLUMN_MAPPING); typos corrigidos: {'de R$ 101/mês a R$ 2.000/mês': 'de R$ 1.001/mês a R$ 2.000/mês', 'de R$ 25.001/mês a R$ 3000/mês': 'de R$ 25.001/mês a R$ 30.000/mês'}"
+    },
+    "faixa_salarial_ordem": {
+      "bloco": "perfil",
+      "tipo": "int",
+      "origem": "derivada de faixa_salarial",
+      "regra": {
+        "Menos de R$ 1.000/mês": 1,
+        "de R$ 1.001/mês a R$ 2.000/mês": 2,
+        "de R$ 2.001/mês a R$ 3.000/mês": 3,
+        "de R$ 3.001/mês a R$ 4.000/mês": 4,
+        "de R$ 4.001/mês a R$ 6.000/mês": 5,
+        "de R$ 6.001/mês a R$ 8.000/mês": 6,
+        "de R$ 8.001/mês a R$ 12.000/mês": 7,
+        "de R$ 12.001/mês a R$ 16.000/mês": 8,
+        "de R$ 16.001/mês a R$ 20.000/mês": 9,
+        "de R$ 20.001/mês a R$ 25.000/mês": 10,
+        "de R$ 25.001/mês a R$ 30.000/mês": 11,
+        "de R$ 30.001/mês a R$ 40.000/mês": 12,
+        "Acima de R$ 40.001/mês": 13
+      }
+    },
+    "faixa_salarial_ponto_medio": {
+      "bloco": "perfil",
+      "tipo": "double",
+      "origem": "derivada de faixa_salarial",
+      "regra": {
+        "Menos de R$ 1.000/mês": 500.0,
+        "de R$ 1.001/mês a R$ 2.000/mês": 1500.5,
+        "de R$ 2.001/mês a R$ 3.000/mês": 2500.5,
+        "de R$ 3.001/mês a R$ 4.000/mês": 3500.5,
+        "de R$ 4.001/mês a R$ 6.000/mês": 5000.5,
+        "de R$ 6.001/mês a R$ 8.000/mês": 7000.5,
+        "de R$ 8.001/mês a R$ 12.000/mês": 10000.5,
+        "de R$ 12.001/mês a R$ 16.000/mês": 14000.5,
+        "de R$ 16.001/mês a R$ 20.000/mês": 18000.5,
+        "de R$ 20.001/mês a R$ 25.000/mês": 22500.5,
+        "de R$ 25.001/mês a R$ 30.000/mês": 27500.5,
+        "de R$ 30.001/mês a R$ 40.000/mês": 35000.5,
+        "Acima de R$ 40.001/mês": 45000.0
+      }
+    },
+    "setor": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": {
+        "2023": "P2_b_Setor",
+        "2024": "2_b_setor",
+        "2025": "2_b_setor"
+      },
+      "regra": "mapeamento explícito por nome (COLUMN_MAPPING)"
+    },
+    "numero_funcionarios": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": {
+        "2023": "P2_c_Numero_de_Funcionarios",
+        "2024": "2_c_numero_de_funcionarios",
+        "2025": "2_c_numero_de_funcionarios"
+      },
+      "regra": "mapeamento explícito por nome (COLUMN_MAPPING)"
+    },
+    "tempo_experiencia_dados": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": {
+        "2023": "P2_i_Quanto_tempo_de_experiência_na_área_de_dados_você_tem",
+        "2024": "2_i_tempo_de_experiencia_em_dados",
+        "2025": "2_i_tempo_de_experiencia_em_dados"
+      },
+      "regra": "mapeamento explícito por nome (COLUMN_MAPPING)"
+    },
+    "modelo_trabalho_atual": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": {
+        "2023": null,
+        "2024": "2_r_modelo_de_trabalho_atual",
+        "2025": "2_q_modelo_de_trabalho_atual"
+      },
+      "regra": "mapeamento explícito por nome (COLUMN_MAPPING)"
+    },
+    "ia_generativa_prioridade": {
+      "bloco": "perfil",
+      "tipo": "string",
+      "origem": {
+        "2023": "P3_e_AI_Generativa_é_uma_prioridade_em_sua_empresa",
+        "2024": "3_e_ai_generativa_e_llm_é_uma_prioridade",
+        "2025": "3_e_ai_generativa_e_llm_é_uma_prioridade"
+      },
+      "regra": "mapeamento explícito por nome (COLUMN_MAPPING)"
+    },
+    "tec_usa_python": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_d_3_Python",
+        "2024": "4_d_3_Python",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "sufixo descritivo ~ /^python$/ | seção 4",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_usa_sql": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_d_1_SQL",
+        "2024": "4_d_1_SQL",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "sufixo descritivo ~ /^sql$/ | seção 4 | mesma pergunta de 'tec_usa_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_usa_r": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_d_2_R",
+        "2024": "4_d_2_R",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "sufixo descritivo ~ /^r$/ | seção 4 | mesma pergunta de 'tec_usa_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_usa_c_cpp_csharp": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_d_4_C_C_C",
+        "2024": "4_d_4_C_C_C",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "sufixo descritivo ~ /^c_c_c$/ | seção 4 | mesma pergunta de 'tec_usa_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_usa_julia": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_d_7_Julia",
+        "2024": "4_d_7_Julia",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "sufixo descritivo ~ /^julia$/ | seção 4 | mesma pergunta de 'tec_usa_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_usa_vba": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_d_9_Visual_Basic_VBA",
+        "2024": "4_d_9_Visual_Basic_VBA",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "sufixo descritivo ~ /^visual_basic_vba$/ | seção 4 | mesma pergunta de 'tec_usa_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_usa_scala": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_d_10_Scala",
+        "2024": "4_d_10_Scala",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "sufixo descritivo ~ /^scala$/ | seção 4 | mesma pergunta de 'tec_usa_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_usa_rust": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_d_12_Rust",
+        "2024": "4_d_12_Rust",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "sufixo descritivo ~ /^rust$/ | seção 4 | mesma pergunta de 'tec_usa_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_usa_nenhuma": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_d_15_Não_utilizo_nenhuma_linguagem",
+        "2024": "4_d_linguagem_de_programacao_dia_a_dia",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "sufixo descritivo ~ /^nao_utilizo.*linguag/ | seção 4 | mesma pergunta de 'tec_usa_python' | 2024: derivado da guarda-chuva contains('Não utilizo') (sub-item não codificado na fonte)",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_usa_dotnet": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_d_5_NET",
+        "2024": "4_d_5_NET",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "sufixo descritivo ~ /^net$/ | seção 4 | mesma pergunta de 'tec_usa_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_usa_java": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_d_6_Java",
+        "2024": "4_d_6_Java",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "sufixo descritivo ~ /^java$/ | seção 4 | mesma pergunta de 'tec_usa_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_usa_sas_stata": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_d_8_SAS_Stata",
+        "2024": "4_d_8_SAS_Stata",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "sufixo descritivo ~ /^sas_stata$/ | seção 4 | mesma pergunta de 'tec_usa_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_usa_matlab": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_d_11_Matlab",
+        "2024": "4_d_11_Matlab",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "sufixo descritivo ~ /^matlab$/ | seção 4 | mesma pergunta de 'tec_usa_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_usa_php": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_d_13_PHP",
+        "2024": "4_d_13_PHP",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "sufixo descritivo ~ /^php$/ | seção 4 | mesma pergunta de 'tec_usa_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_usa_javascript": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_d_14_JavaScript",
+        "2024": "4_d_14_JavaScript",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "sufixo descritivo ~ /^javascript$/ | seção 4 | mesma pergunta de 'tec_usa_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_linguagem_mais_usada": {
+      "bloco": "tec",
+      "tipo": "string",
+      "origem": {
+        "2023": "P4_e_Entre_as_linguagens_listadas_abaixo_qual_é_a_que_você_mais_utiliza_no_trabalho",
+        "2024": "4_e_linguagem_mais_usada",
+        "2025": null
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "regra": "nome exato: ['P4_e_Entre_as_linguagens_listadas_abaixo_qual_é_a_que_você_mais_utiliza_no_trabalho', '4_e_linguagem_mais_usada'] | seção 4",
+      "conversao": "cast string"
+    },
+    "tec_pref_python": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": null,
+        "2024": null,
+        "2025": "4_c_3_Python"
+      },
+      "anos_aplicaveis": [
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^python$/ | seção 4",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_pref_sql": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": null,
+        "2024": null,
+        "2025": "4_c_1_SQL"
+      },
+      "anos_aplicaveis": [
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^sql$/ | seção 4 | mesma pergunta de 'tec_pref_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_pref_r": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": null,
+        "2024": null,
+        "2025": "4_c_2_R"
+      },
+      "anos_aplicaveis": [
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^r$/ | seção 4 | mesma pergunta de 'tec_pref_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_pref_c_cpp_csharp": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": null,
+        "2024": null,
+        "2025": "4_c_4_C_C_C"
+      },
+      "anos_aplicaveis": [
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^c_c_c$/ | seção 4 | mesma pergunta de 'tec_pref_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_pref_julia": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": null,
+        "2024": null,
+        "2025": "4_c_5_Julia"
+      },
+      "anos_aplicaveis": [
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^julia$/ | seção 4 | mesma pergunta de 'tec_pref_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_pref_vba": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": null,
+        "2024": null,
+        "2025": "4_c_6_Visual_Basic_VBA"
+      },
+      "anos_aplicaveis": [
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^visual_basic_vba$/ | seção 4 | mesma pergunta de 'tec_pref_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_pref_scala": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": null,
+        "2024": null,
+        "2025": "4_c_7_Scala"
+      },
+      "anos_aplicaveis": [
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^scala$/ | seção 4 | mesma pergunta de 'tec_pref_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_pref_dax": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": null,
+        "2024": null,
+        "2025": "4_c_8_DAX"
+      },
+      "anos_aplicaveis": [
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^dax$/ | seção 4 | mesma pergunta de 'tec_pref_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_pref_rust": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": null,
+        "2024": null,
+        "2025": "4_c_9_Rust"
+      },
+      "anos_aplicaveis": [
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^rust$/ | seção 4 | mesma pergunta de 'tec_pref_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_pref_nenhuma": {
+      "bloco": "tec",
+      "tipo": "boolean",
+      "origem": {
+        "2023": null,
+        "2024": null,
+        "2025": "4_c_10_Não_utilizo_nenhuma_das_linguagens_listadas"
+      },
+      "anos_aplicaveis": [
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^nao_utilizo.*linguag/ | seção 4 | mesma pergunta de 'tec_pref_python'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_uso_independente": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_f_1_Colaboradores_usando_AI_generativa_de_forma_independente_e_descentralizada",
+        "2024": "3_f_1_Colaboradores_usando_AI_generativa_de_forma_independente_e_descentralizada",
+        "2025": "3_f_1_Colaboradores_usando_AI_generativa_de_forma_independente_e_descentralizada"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /usando_ai_generativa_de_forma_independente_e_descentralizada/ | seção 3",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_direcionamento_central": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_f_2_Direcionamento_centralizado_do_uso_de_AI_generativa",
+        "2024": "3_f_2_Direcionamento_centralizado_do_uso_de_AI_generativa",
+        "2025": "3_f_2_Direcionamento_centralizado_do_uso_de_AI_generativa"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /direcionamento_centralizado_do_uso_de_ai_generativa/ | seção 3 | mesma pergunta de 'ia_emp_uso_independente'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_copilots_dev": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_f_3_Desenvolvedores_utilizando_Copilots",
+        "2024": "3_f_3_Desenvolvedores_utilizando_Copilots",
+        "2025": "3_f_3_Desenvolvedores_utilizando_Copilots"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /desenvolvedores_utilizando_copilots/ | seção 3 | mesma pergunta de 'ia_emp_uso_independente'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_produto_externo": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_f_4_AI_Generativa_e_LLMs_para_melhorar_produtos_externos",
+        "2024": "3_f_4_AI_Generativa_e_LLMs_para_melhorar_produtos_externos_para_os_clientes_finais",
+        "2025": "3_f_4_AI_Generativa_e_LLMs_para_melhorar_produtos_externos_para_os_clientes_finais"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /melhorar_produtos_externos/ | seção 3 | mesma pergunta de 'ia_emp_uso_independente'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_produto_interno": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_f_5_AI_Generativa_e_LLMs_para_melhorar_produtos_internos_para_os_colaboradores",
+        "2024": "3_f_5_AI_Generativa_e_LLMs_para_melhorar_produtos_internos_para_os_colaboradores",
+        "2025": "3_f_5_AI_Generativa_e_LLMs_para_melhorar_produtos_internos_para_os_colaboradores"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /melhorar_produtos_internos_para_os_colaboradores/ | seção 3 | mesma pergunta de 'ia_emp_uso_independente'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_principal_frente": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_f_6_IA_Generativa_e_LLMs_como_principal_frente_do_negócio",
+        "2024": "3_f_6_IA_Generativa_e_LLMs_como_principal_frente_do_negócio",
+        "2025": "3_f_6_IA_Generativa_e_LLMs_como_principal_frente_do_negócio"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /como_principal_frente_do_negocio/ | seção 3 | mesma pergunta de 'ia_emp_uso_independente'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_nao_prioridade": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_f_7_IA_Generativa_e_LLMs_não_é_prioridade",
+        "2024": "3_f_7_IA_Generativa_e_LLMs_não_é_prioridade",
+        "2025": "3_f_7_IA_Generativa_e_LLMs_não_é_prioridade"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /nao_e_prioridade/ | seção 3 | mesma pergunta de 'ia_emp_uso_independente'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_nao_sei_opinar": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_f_8_Não_sei_opinar_sobre_o_uso_de_IA_Generativa_e_LLMs_na_empresa",
+        "2024": "3_f_8_Não_sei_opinar_sobre_o_uso_de_IA_Generativa_e_LLMs_na_empresa",
+        "2025": "3_f_8_Não_sei_opinar_sobre_o_uso_de_IA_Generativa_e_LLMs_na_empresa"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /nao_sei_opinar_sobre_o_uso_de_ia_generativa_e_llms_na_empresa/ | seção 3 | mesma pergunta de 'ia_emp_uso_independente'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_motivo_casos_uso": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_g_1_Falta_de_compreensão_dos_casos_de_uso",
+        "2024": "3_g_1_Falta_de_compreensão_dos_casos_de_uso",
+        "2025": "3_h_1_Falta_de_compreensão_dos_casos_de_uso"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^falta_de_compreensao_dos_casos_de_uso$/ | seção 3",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_motivo_alucinacao": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_g_2_Falta_de_confiabilidade_das_saídas_alucinação_dos_modelos",
+        "2024": "3_g_2_Falta_de_confiabilidade_das_saídas_alucinação_dos_modelos",
+        "2025": "3_h_2_Falta_de_confiabilidade_das_saídas_alucinação_dos_modelos"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^falta_de_confiabilidade_das_saidas_alucinacao_dos_modelos$/ | seção 3 | mesma pergunta de 'ia_emp_motivo_casos_uso'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_motivo_regulamentacao": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_g_3_Incerteza_em_relação_a_regulamentação",
+        "2024": "3_g_3_Incerteza_em_relação_a_regulamentação",
+        "2025": "3_h_3_Incerteza_em_relação_a_regulamentação"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^incerteza_em_relacao_a_regulamentacao$/ | seção 3 | mesma pergunta de 'ia_emp_motivo_casos_uso'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_motivo_seguranca_privacidade": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_g_4_Preocupações_com_segurança_e_privacidade_de_dados",
+        "2024": "3_g_4_Preocupações_com_segurança_e_privacidade_de_dados",
+        "2025": "3_h_4_Preocupações_com_segurança_e_privacidade_de_dados"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^preocupacoes_com_seguranca_e_privacidade_de_dados$/ | seção 3 | mesma pergunta de 'ia_emp_motivo_casos_uso'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_motivo_roi": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_g_5_Retorno_sobre_investimento_ROI_não_comprovado_de_IA_Generativa",
+        "2024": "3_g_5_Retorno_sobre_investimento_ROI_não_comprovado_de_IA_Generativa",
+        "2025": "3_h_5_Retorno_sobre_investimento_ROI_não_comprovado_de_IA_Generativa"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^retorno_sobre_investimento_roi_nao_comprovado_de_ia_generativa$/ | seção 3 | mesma pergunta de 'ia_emp_motivo_casos_uso'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_motivo_dados_nao_prontos": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_g_6_Dados_da_empresa_não_estão_prontos_para_uso_de_IA_Generativa",
+        "2024": "3_g_6_Dados_da_empresa_não_estão_prontos_para_uso_de_IA_Generativa",
+        "2025": "3_h_6_Dados_da_empresa_não_estão_prontos_para_uso_de_IA_Generativa"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^dados_da_empresa_nao_estao_prontos_para_uso_de_ia_generativa$/ | seção 3 | mesma pergunta de 'ia_emp_motivo_casos_uso'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_motivo_expertise": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_g_7_Falta_de_expertise_ou_falta_de_recursos",
+        "2024": "3_g_7_Falta_de_expertise_ou_falta_de_recursos",
+        "2025": "3_h_7_Falta_de_expertise_ou_falta_de_recursos"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^falta_de_expertise_ou_falta_de_recursos$/ | seção 3 | mesma pergunta de 'ia_emp_motivo_casos_uso'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_motivo_alta_direcao": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_g_8_Alta_direção_da_empresa_não_vê_valor_ou_não_vê_como_prioridade",
+        "2024": "3_g_8_Alta_direção_da_empresa_não_vê_valor_ou_não_vê_como_prioridade",
+        "2025": "3_h_8_Alta_direção_da_empresa_não_vê_valor_ou_não_vê_como_prioridade"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^alta_direcao_da_empresa_nao_ve_valor_ou_nao_ve_como_prioridade$/ | seção 3 | mesma pergunta de 'ia_emp_motivo_casos_uso'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_motivo_propriedade_intelectual": {
+      "bloco": "ia_emp",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P3_g_9_Preocupações_com_propriedade_intelectual",
+        "2024": "3_g_9_Preocupações_com_propriedade_intelectual",
+        "2025": "3_h_9_Preocupações_com_propriedade_intelectual"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^preocupacoes_com_propriedade_intelectual$/ | seção 3 | mesma pergunta de 'ia_emp_motivo_casos_uso'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_emp_bons_resultados_llm": {
+      "bloco": "ia_emp",
+      "tipo": "string",
+      "origem": {
+        "2023": null,
+        "2024": null,
+        "2025": "3_g_empresa_está_conseguindo_ter_bons_resultados_com_llms"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^empresa_esta_conseguindo_ter_bons_resultados_com_llms$/ | seção 3",
+      "conversao": "cast string"
+    },
+    "ia_ind_uso_independente": {
+      "bloco": "ia_ind",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_l_1_Colaboradores_usando_AI_generativa_de_forma_independente_e_descentralizada",
+        "2024": "4_l_1_Colaboradores_usando_AI_generativa_de_forma_independente_e_descentralizada",
+        "2025": "4_i_1_Colaboradores_usando_AI_generativa_de_forma_independente_e_descentralizada"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /usando_ai_generativa_de_forma_independente_e_descentralizada/ | seção 4",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_ind_direcionamento_central": {
+      "bloco": "ia_ind",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_l_2_Direcionamento_centralizado_do_uso_de_AI_generativa",
+        "2024": "4_l_2_Direcionamento_centralizado_do_uso_de_AI_generativa",
+        "2025": "4_i_2_Direcionamento_centralizado_do_uso_de_AI_generativa"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /direcionamento_centralizado_do_uso_de_ai_generativa/ | seção 4 | mesma pergunta de 'ia_ind_uso_independente'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_ind_copilots_dev": {
+      "bloco": "ia_ind",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_l_3_Desenvolvedores_utilizando_Copilots",
+        "2024": "4_l_3_Desenvolvedores_utilizando_Copilots",
+        "2025": "4_i_3_Desenvolvedores_utilizando_Copilots"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /desenvolvedores_utilizando_copilots/ | seção 4 | mesma pergunta de 'ia_ind_uso_independente'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_ind_produto_externo": {
+      "bloco": "ia_ind",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_l_4_AI_Generativa_e_LLMs_para_melhorar_produtos_externos_para_os_clientes_finais",
+        "2024": "4_l_4_AI_Generativa_e_LLMs_para_melhorar_produtos_externos_para_os_clientes_finais",
+        "2025": "4_i_4_AI_Generativa_e_LLMs_para_melhorar_produtos_externos_para_os_clientes_finais"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /melhorar_produtos_externos/ | seção 4 | mesma pergunta de 'ia_ind_uso_independente'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_ind_produto_interno": {
+      "bloco": "ia_ind",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_l_5_AI_Generativa_e_LLMs_para_melhorar_produtos_internos_para_os_colaboradores",
+        "2024": "4_l_5_AI_Generativa_e_LLMs_para_melhorar_produtos_internos_para_os_colaboradores",
+        "2025": "4_i_5_AI_Generativa_e_LLMs_para_melhorar_produtos_internos_para_os_colaboradores"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /melhorar_produtos_internos_para_os_colaboradores/ | seção 4 | mesma pergunta de 'ia_ind_uso_independente'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_ind_principal_frente": {
+      "bloco": "ia_ind",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_l_6_IA_Generativa_e_LLMs_como_principal_frente_do_negócio",
+        "2024": "4_l_6_IA_Generativa_e_LLMs_como_principal_frente_do_negócio",
+        "2025": "4_i_6_IA_Generativa_e_LLMs_como_principal_frente_do_negócio"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /como_principal_frente_do_negocio/ | seção 4 | mesma pergunta de 'ia_ind_uso_independente'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_ind_nao_prioridade": {
+      "bloco": "ia_ind",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_l_7_IA_Generativa_e_LLMs_não_é_prioridade",
+        "2024": "4_l_7_IA_Generativa_e_LLMs_não_é_prioridade",
+        "2025": "4_i_7_IA_Generativa_e_LLMs_não_é_prioridade"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /nao_e_prioridade/ | seção 4 | mesma pergunta de 'ia_ind_uso_independente'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_ind_nao_sei_opinar": {
+      "bloco": "ia_ind",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_l_8_Não_sei_opinar_sobre_o_uso_de_IA_Generativa_e_LLMs_na_empresa",
+        "2024": "4_l_8_Não_sei_opinar_sobre_o_uso_de_IA_Generativa_e_LLMs_na_empresa",
+        "2025": "4_i_8_Não_sei_opinar_sobre_o_uso_de_IA_Generativa_e_LLMs_na_empresa"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^nao_sei_opinar/ | seção 4 | mesma pergunta de 'ia_ind_uso_independente'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_pessoal_nao_usa": {
+      "bloco": "ia_pessoal",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_m_1_Não_uso_soluções_de_AI_Generativa_com_foco_em_produtividade",
+        "2024": "4_m_1_Não_uso_soluções_de_AI_Generativa_com_foco_em_produtividade",
+        "2025": "4_j_1_Não_uso_soluções_de_AI_Generativa_com_foco_em_produtividade"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^nao_uso_solucoes_de_ai_generativa_com_foco_em_produtividade$/ | seção 4",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_pessoal_usa_gratis": {
+      "bloco": "ia_pessoal",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_m_2_Uso_soluções_gratuitas_de_AI_Generativa_com_foco_em_produtividade",
+        "2024": "4_m_2_Uso_soluções_gratuitas_de_AI_Generativa_com_foco_em_produtividade",
+        "2025": "4_j_2_Uso_soluções_gratuitas_de_AI_Generativa_com_foco_em_produtividade"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^uso_solucoes_gratuitas_de_ai_generativa_com_foco_em_produtividade$/ | seção 4 | mesma pergunta de 'ia_pessoal_nao_usa'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_pessoal_usa_pago_proprio": {
+      "bloco": "ia_pessoal",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_m_3_Uso_e_pago_pelas_soluções_de_AI_Generativa_com_foco_em_produtividade",
+        "2024": "4_m_3_Uso_e_pago_pelas_soluções_de_AI_Generativa_com_foco_em_produtividade",
+        "2025": "4_j_3_Uso_e_pago_pelas_soluções_de_AI_Generativa_com_foco_em_produtividade"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^uso_e_pago_pelas_solucoes_de_ai_generativa_com_foco_em_produtividade$/ | seção 4 | mesma pergunta de 'ia_pessoal_nao_usa'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_pessoal_usa_pago_empresa": {
+      "bloco": "ia_pessoal",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_m_4_A_empresa_que_trabalho_paga_pelas_soluções_de_AI_Generativa_com_foco_em_produtividade",
+        "2024": "4_m_4_A_empresa_que_trabalho_paga_pelas_soluções_de_AI_Generativa_com_foco_em_produtividade",
+        "2025": "4_j_4_A_empresa_que_trabalho_paga_pelas_soluções_de_AI_Generativa_com_foco_em_produtividade"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /empresa_que_trabalho_paga_pelas_solucoes_de_ai_generativa_com_foco_em_produtividade$/ | seção 4 | mesma pergunta de 'ia_pessoal_nao_usa'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "ia_pessoal_usa_copilot": {
+      "bloco": "ia_pessoal",
+      "tipo": "boolean",
+      "origem": {
+        "2023": "P4_m_5_Uso_soluções_do_tipo_Copilot",
+        "2024": "4_m_5_Uso_soluções_do_tipo_Copilot",
+        "2025": "4_j_5_Uso_soluções_do_tipo_Copilot"
+      },
+      "anos_aplicaveis": [
+        2023,
+        2024,
+        2025
+      ],
+      "regra": "sufixo descritivo ~ /^uso_solucoes_do_tipo_copilot$/ | seção 4 | mesma pergunta de 'ia_pessoal_nao_usa'",
+      "conversao": "'1' -> true, '0' -> false, null -> null"
+    },
+    "tec_pref_normalizada": {
+      "bloco": "tec",
+      "tipo": "string",
+      "anos_aplicaveis": [
+        2023,
+        2024
+      ],
+      "origem": {
+        "2023": "P4_f_Entre_as_linguagens_listadas_abaixo_qual_é_a_sua_preferida",
+        "2024": "4_f_linguagem_preferida",
+        "2025": null
+      },
+      "regra": {
+        "normalizacao": "lower(trim(texto)) in variantes -> categoria; sem correspondência -> 'Outra'; null -> null; 2025 -> null (multi-select, ver tec_pref_*)",
+        "categorias": {
+          "Python": [
+            "python"
+          ],
+          "SQL": [
+            "sql"
+          ],
+          "R": [
+            "r"
+          ],
+          "Go": [
+            "go",
+            "golang"
+          ],
+          "DAX/M": [
+            "dax/m",
+            "m/dax",
+            "m e dax",
+            "dax"
+          ],
+          "Java": [
+            "java"
+          ],
+          "JavaScript": [
+            "javascript"
+          ],
+          "C/C++/C#": [
+            "c/c++/c#"
+          ],
+          "Scala": [
+            "scala"
+          ],
+          "Rust": [
+            "rust"
+          ],
+          "Julia": [
+            "julia"
+          ],
+          "Não informado": [
+            "não sei",
+            "nao sei",
+            "."
+          ]
+        }
+      }
+    },
+    "ia_pessoal_nivel_uso": {
+      "bloco": "ia_pessoal",
+      "tipo": "string",
+      "origem": "derivada de ia_pessoal_usa_pago_empresa / usa_pago_proprio / usa_gratis / usa_copilot / nao_usa",
+      "regra": [
+        "usa_pago_empresa -> 'Empresa paga'",
+        "usa_pago_proprio -> 'Paga do próprio bolso'",
+        "usa_gratis OR usa_copilot -> 'Usa gratuito/copilot'",
+        "nao_usa -> 'Não usa'",
+        "senão -> null"
+      ]
+    },
+    "ano_pesquisa": {
+      "bloco": "particao",
+      "tipo": "int",
+      "origem": {
+        "2023": "ano_pesquisa",
+        "2024": "ano_pesquisa",
+        "2025": "ano_pesquisa"
+      },
+      "regra": "partição herdada da Bronze"
+    }
+  }
+}

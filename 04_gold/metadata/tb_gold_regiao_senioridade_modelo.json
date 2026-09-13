@@ -1,0 +1,979 @@
+{
+  "tabela": "workspace.tb_gold_regiao_senioridade_modelo",
+  "location": "s3://614133392546-lab/data-output/gold/state-of-data/regiao_senioridade_modelo/",
+  "origem": "workspace.tb_state_of_data_silver",
+  "gerado_em": "2026-09-13T04:32:51.847210+00:00",
+  "pergunta_respondida": "Como o modelo de trabalho (remoto/híbrido/presencial) se distribui por região e senioridade, e com que salário médio?",
+  "particao": "ano_pesquisa",
+  "qtd_linhas": 219,
+  "schema": [
+    {
+      "coluna": "regiao_onde_mora",
+      "tipo": "string",
+      "descricao": "região; NULL -> 'Não informado'"
+    },
+    {
+      "coluna": "nivel_senioridade_agrupada",
+      "tipo": "string",
+      "descricao": "Júnior/Pleno/Sênior; NULL -> 'Não informado'"
+    },
+    {
+      "coluna": "modelo_trabalho_atual",
+      "tipo": "string",
+      "descricao": "modelo; NULL -> 'Não informado'; 2023 -> 'Não perguntado em 2023'"
+    },
+    {
+      "coluna": "ano_pesquisa",
+      "tipo": "int",
+      "descricao": "edição (partição)"
+    },
+    {
+      "coluna": "contagem",
+      "tipo": "bigint",
+      "descricao": "respondentes na célula (todos, com ou sem salário)"
+    },
+    {
+      "coluna": "salario_medio",
+      "tipo": "double",
+      "descricao": "média de faixa_salarial_ponto_medio (só não nulos); NULL em células especiais"
+    },
+    {
+      "coluna": "amostra_baixa",
+      "tipo": "boolean",
+      "descricao": "contagem < 30"
+    }
+  ],
+  "regras": {
+    "nao_perguntado": "2023: modelo_trabalho_atual = 'Não perguntado em 2023' mantendo a quebra por região × senioridade (contagem preenchida, salário NULL)",
+    "especiais": "'Não informado' em qualquer dimensão ou 'Não perguntado': salário NULL",
+    "amostra_baixa": "contagem < 30"
+  },
+  "validacao_esperada": "SUM(contagem) por ano = 5293/5217/3495",
+  "drift": [],
+  "amostra_baixa_casos": [
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 6
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 6
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2025,
+      "contagem": 6
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 8
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2024,
+      "contagem": 8
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2024,
+      "contagem": 8
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 8
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2025,
+      "contagem": 8
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 8
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 8
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2024,
+      "contagem": 9
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 9
+    },
+    {
+      "regiao_onde_mora": "Sul",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Não perguntado em 2023",
+      "ano_pesquisa": 2023,
+      "contagem": 10
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 10
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 10
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 10
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 10
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 10
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2025,
+      "contagem": 11
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 11
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 12
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 12
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 12
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2025,
+      "contagem": 12
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 12
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2025,
+      "contagem": 12
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 12
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 12
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 13
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2025,
+      "contagem": 13
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 13
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2024,
+      "contagem": 14
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 14
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 14
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 14
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 14
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2024,
+      "contagem": 15
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 15
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2024,
+      "contagem": 15
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2024,
+      "contagem": 15
+    },
+    {
+      "regiao_onde_mora": "Sul",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 15
+    },
+    {
+      "regiao_onde_mora": "Sul",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 15
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2024,
+      "contagem": 16
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2024,
+      "contagem": 16
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2024,
+      "contagem": 16
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 16
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2025,
+      "contagem": 16
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2025,
+      "contagem": 17
+    },
+    {
+      "regiao_onde_mora": "Sul",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 17
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 18
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 18
+    },
+    {
+      "regiao_onde_mora": "Sul",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 18
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2024,
+      "contagem": 19
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2024,
+      "contagem": 20
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Não perguntado em 2023",
+      "ano_pesquisa": 2023,
+      "contagem": 20
+    },
+    {
+      "regiao_onde_mora": "Sul",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 20
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2024,
+      "contagem": 21
+    },
+    {
+      "regiao_onde_mora": "Sul",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 21
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Não perguntado em 2023",
+      "ano_pesquisa": 2023,
+      "contagem": 21
+    },
+    {
+      "regiao_onde_mora": "Sul",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 21
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 21
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 21
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 21
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2024,
+      "contagem": 23
+    },
+    {
+      "regiao_onde_mora": "Sul",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2025,
+      "contagem": 23
+    },
+    {
+      "regiao_onde_mora": "Sul",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo híbrido com dias fixos de trabalho presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 24
+    },
+    {
+      "regiao_onde_mora": "Não informado",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Não perguntado em 2023",
+      "ano_pesquisa": 2023,
+      "contagem": 24
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 24
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 25
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Não perguntado em 2023",
+      "ano_pesquisa": 2023,
+      "contagem": 25
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 25
+    },
+    {
+      "regiao_onde_mora": "Norte",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Não perguntado em 2023",
+      "ano_pesquisa": 2023,
+      "contagem": 27
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 27
+    },
+    {
+      "regiao_onde_mora": "Sul",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo híbrido flexível (o funcionário tem liberdade para escolher quando estar no escritório presencialmente)",
+      "ano_pesquisa": 2025,
+      "contagem": 27
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Não informado",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 28
+    },
+    {
+      "regiao_onde_mora": "Centro-oeste",
+      "nivel_senioridade_agrupada": "Pleno",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2024,
+      "contagem": 29
+    },
+    {
+      "regiao_onde_mora": "Nordeste",
+      "nivel_senioridade_agrupada": "Júnior",
+      "modelo_trabalho_atual": "Modelo 100% remoto",
+      "ano_pesquisa": 2025,
+      "contagem": 29
+    },
+    {
+      "regiao_onde_mora": "Sul",
+      "nivel_senioridade_agrupada": "Sênior",
+      "modelo_trabalho_atual": "Modelo 100% presencial",
+      "ano_pesquisa": 2025,
+      "contagem": 29
+    }
+  ],
+  "referencias": {
+    "respondentes_por_ano": {
+      "2024": 5217,
+      "2025": 3495,
+      "2023": 5293
+    }
+  }
+}

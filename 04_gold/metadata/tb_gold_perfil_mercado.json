@@ -1,0 +1,133 @@
+{
+  "tabela": "workspace.tb_gold_perfil_mercado",
+  "location": "s3://614133392546-lab/data-output/gold/state-of-data/perfil_mercado/",
+  "origem": "workspace.tb_state_of_data_silver",
+  "gerado_em": "2026-09-13T17:17:07.719395+00:00",
+  "pergunta_respondida": "Perfil do mercado: distribuição de cargo, senioridade, setor, porte da empresa e modelo de trabalho por edição",
+  "formato": "longo (tidy): uma linha por (dimensao, valor, ano_pesquisa)",
+  "particao": "ano_pesquisa",
+  "qtd_linhas": 164,
+  "schema": [
+    {
+      "coluna": "dimensao",
+      "tipo": "string",
+      "descricao": "nome da dimensão (coluna da Silver)"
+    },
+    {
+      "coluna": "valor",
+      "tipo": "string",
+      "descricao": "categoria dentro da dimensão"
+    },
+    {
+      "coluna": "ano_pesquisa",
+      "tipo": "int",
+      "descricao": "edição da pesquisa (partição)"
+    },
+    {
+      "coluna": "contagem",
+      "tipo": "bigint",
+      "descricao": "respondentes na categoria"
+    },
+    {
+      "coluna": "percentual",
+      "tipo": "double",
+      "descricao": "contagem / soma das categorias regulares de (dimensao, ano); NULL para 'Não informado' e 'Não perguntado em <ano>'"
+    }
+  ],
+  "regras": {
+    "nao_informado": "valor NULL -> 'Não informado' (contagem preenchida, percentual NULL, fora do denominador)",
+    "outros": "com top-N: valores fora do top-N -> 'Outros' (entra no denominador; NULL continua 'Não informado')",
+    "nao_perguntado": "anos sem a pergunta -> 1 linha 'Não perguntado em {ano}' com contagem = total de respondentes do ano e percentual NULL"
+  },
+  "top_n_config": {
+    "cargo_atual_agrupado": 14,
+    "nivel_senioridade_agrupada": null,
+    "setor": null,
+    "numero_funcionarios": null,
+    "modelo_trabalho_atual": null
+  },
+  "dimensoes": [
+    {
+      "coluna": "cargo_atual_agrupado",
+      "top_n": 14,
+      "top_n_aplicado": true,
+      "top_n_valores": [
+        "Analista de Dados/Data Analyst",
+        "Cientista de Dados/Data Scientist",
+        "Engenheiro de Dados/Arquiteto de Dados",
+        "Analista de BI/BI Analyst",
+        "Outra Opção",
+        "Analista de Negócios/Business Analyst",
+        "Analytics Engineer",
+        "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+        "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+        "Analista de Suporte/Analista Técnico",
+        "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+        "Outras Engenharias (não inclui dev)",
+        "Professor/Pesquisador",
+        "Estatístico"
+      ],
+      "anos_nao_perguntado": [],
+      "cardinalidade": 17,
+      "agrupados": {
+        "Outros|2023": 64,
+        "Não informado|2024": 1399,
+        "Não informado|2023": 1436,
+        "Não informado|2025": 994
+      }
+    },
+    {
+      "coluna": "nivel_senioridade_agrupada",
+      "top_n": null,
+      "top_n_aplicado": false,
+      "top_n_valores": null,
+      "anos_nao_perguntado": [],
+      "cardinalidade": 3,
+      "agrupados": {
+        "Não informado|2024": 1399,
+        "Não informado|2023": 1436,
+        "Não informado|2025": 994
+      }
+    },
+    {
+      "coluna": "setor",
+      "top_n": null,
+      "top_n_aplicado": false,
+      "top_n_valores": null,
+      "anos_nao_perguntado": [],
+      "cardinalidade": 21,
+      "agrupados": {
+        "Não informado|2024": 354,
+        "Não informado|2023": 540,
+        "Não informado|2025": 267
+      }
+    },
+    {
+      "coluna": "numero_funcionarios",
+      "top_n": null,
+      "top_n_aplicado": false,
+      "top_n_valores": null,
+      "anos_nao_perguntado": [],
+      "cardinalidade": 9,
+      "agrupados": {
+        "Não informado|2024": 354,
+        "Não informado|2023": 540,
+        "Não informado|2025": 267
+      }
+    },
+    {
+      "coluna": "modelo_trabalho_atual",
+      "top_n": null,
+      "top_n_aplicado": false,
+      "top_n_valores": null,
+      "anos_nao_perguntado": [
+        2023
+      ],
+      "cardinalidade": 4,
+      "agrupados": {
+        "Não informado|2024": 354,
+        "Não informado|2025": 267
+      }
+    }
+  ]
+}

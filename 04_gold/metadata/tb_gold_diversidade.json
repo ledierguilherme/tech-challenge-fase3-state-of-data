@@ -1,0 +1,592 @@
+{
+  "tabela": "workspace.tb_gold_diversidade",
+  "location": "s3://614133392546-lab/data-output/gold/state-of-data/diversidade/",
+  "origem": "workspace.tb_state_of_data_silver",
+  "gerado_em": "2026-09-13T04:24:24.594482+00:00",
+  "pergunta_respondida": "Como gênero e cor/raça se distribuem por nível de senioridade (e no total) e com que salário médio, por edição?",
+  "particao": "ano_pesquisa",
+  "qtd_linhas": 163,
+  "schema": [
+    {
+      "coluna": "recorte",
+      "tipo": "string",
+      "descricao": "'genero' ou 'cor_raca_etnia'"
+    },
+    {
+      "coluna": "valor_recorte",
+      "tipo": "string",
+      "descricao": "categoria do recorte; NULL -> 'Não informado'"
+    },
+    {
+      "coluna": "nivel_senioridade_agrupada",
+      "tipo": "string",
+      "descricao": "Júnior/Pleno/Sênior, 'Não informado' ou 'Todos' (agregado sem quebra)"
+    },
+    {
+      "coluna": "ano_pesquisa",
+      "tipo": "int",
+      "descricao": "edição (partição)"
+    },
+    {
+      "coluna": "contagem",
+      "tipo": "bigint",
+      "descricao": "respondentes na célula"
+    },
+    {
+      "coluna": "percentual",
+      "tipo": "double",
+      "descricao": "contagem / soma dos valores regulares do recorte dentro de (senioridade, ano); NULL para 'Não informado'"
+    },
+    {
+      "coluna": "salario_medio",
+      "tipo": "double",
+      "descricao": "média de faixa_salarial_ponto_medio (só não nulos); NULL para valor 'Não informado'"
+    },
+    {
+      "coluna": "amostra_baixa",
+      "tipo": "boolean",
+      "descricao": "contagem < 30"
+    }
+  ],
+  "regras": {
+    "todos": "linha adicional por (recorte, valor_recorte, ano) com nivel_senioridade_agrupada = 'Todos'",
+    "denominador": "só valor_recorte regular (exclui 'Não informado'); grupo senioridade 'Não informado' é um grupo regular (quem não atua em dados)",
+    "amostra_baixa": "contagem < 30"
+  },
+  "validacao_esperada": "para nivel_senioridade_agrupada='Todos', SUM(percentual) por (recorte, ano) = 1.0",
+  "drift": [],
+  "amostra_baixa_casos": [
+    {
+      "recorte": "genero",
+      "valor_recorte": "Outro",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Outra",
+      "nivel_senioridade_agrupada": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Outro",
+      "nivel_senioridade_agrupada": "Pleno",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Indígena",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Outra",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Outra",
+      "nivel_senioridade_agrupada": "Pleno",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Outra",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Indígena",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Não informado",
+      "nivel_senioridade_agrupada": "Todos",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Indígena",
+      "nivel_senioridade_agrupada": "Pleno",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Outro",
+      "nivel_senioridade_agrupada": "Pleno",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Outra",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Outro",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Pleno",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Outro",
+      "nivel_senioridade_agrupada": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Não informado",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Outro",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Outra",
+      "nivel_senioridade_agrupada": "Pleno",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Pleno",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Outra",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Outro",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Indígena",
+      "nivel_senioridade_agrupada": "Pleno",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Pleno",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Outra",
+      "nivel_senioridade_agrupada": "Pleno",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Indígena",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Outro",
+      "nivel_senioridade_agrupada": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Indígena",
+      "nivel_senioridade_agrupada": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Indígena",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Indígena",
+      "nivel_senioridade_agrupada": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Indígena",
+      "nivel_senioridade_agrupada": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Indígena",
+      "nivel_senioridade_agrupada": "Todos",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Indígena",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Pleno",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Outro",
+      "nivel_senioridade_agrupada": "Pleno",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Pleno",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Outra",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Outro",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Outra",
+      "nivel_senioridade_agrupada": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Outra",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Outra",
+      "nivel_senioridade_agrupada": "Todos",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Pleno",
+      "ano_pesquisa": 2023,
+      "contagem": 6
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Outro",
+      "nivel_senioridade_agrupada": "Todos",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Outro",
+      "nivel_senioridade_agrupada": "Todos",
+      "ano_pesquisa": 2024,
+      "contagem": 8
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Outra",
+      "nivel_senioridade_agrupada": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 9
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Outro",
+      "nivel_senioridade_agrupada": "Todos",
+      "ano_pesquisa": 2023,
+      "contagem": 9
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2023,
+      "contagem": 10
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Indígena",
+      "nivel_senioridade_agrupada": "Todos",
+      "ano_pesquisa": 2024,
+      "contagem": 10
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 10
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2025,
+      "contagem": 10
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2024,
+      "contagem": 11
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Indígena",
+      "nivel_senioridade_agrupada": "Todos",
+      "ano_pesquisa": 2023,
+      "contagem": 12
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Outra",
+      "nivel_senioridade_agrupada": "Todos",
+      "ano_pesquisa": 2025,
+      "contagem": 12
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2023,
+      "contagem": 13
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Todos",
+      "ano_pesquisa": 2025,
+      "contagem": 13
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Todos",
+      "ano_pesquisa": 2024,
+      "contagem": 15
+    },
+    {
+      "recorte": "genero",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Todos",
+      "ano_pesquisa": 2023,
+      "contagem": 16
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 17
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Outra",
+      "nivel_senioridade_agrupada": "Todos",
+      "ano_pesquisa": 2023,
+      "contagem": 18
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Amarela",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2025,
+      "contagem": 19
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Amarela",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2024,
+      "contagem": 26
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Amarela",
+      "nivel_senioridade_agrupada": "Júnior",
+      "ano_pesquisa": 2023,
+      "contagem": 26
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Amarela",
+      "nivel_senioridade_agrupada": "Sênior",
+      "ano_pesquisa": 2025,
+      "contagem": 27
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Prefiro não informar",
+      "nivel_senioridade_agrupada": "Todos",
+      "ano_pesquisa": 2025,
+      "contagem": 28
+    },
+    {
+      "recorte": "cor_raca_etnia",
+      "valor_recorte": "Amarela",
+      "nivel_senioridade_agrupada": "Pleno",
+      "ano_pesquisa": 2025,
+      "contagem": 28
+    }
+  ]
+}

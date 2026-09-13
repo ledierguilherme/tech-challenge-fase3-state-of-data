@@ -1,0 +1,5314 @@
+{
+  "tabela": "workspace.tb_gold_salario_por_perfil",
+  "location": "s3://614133392546-lab/data-output/gold/state-of-data/salario_por_perfil/",
+  "origem": "workspace.tb_state_of_data_silver",
+  "gerado_em": "2026-09-13T04:21:39.038337+00:00",
+  "pergunta_respondida": "Quanto ganha cada perfil (cargo × senioridade × região) e como isso evoluiu por edição?",
+  "particao": "ano_pesquisa",
+  "qtd_linhas": 1048,
+  "schema": [
+    {
+      "coluna": "cargo_atual_agrupado",
+      "tipo": "string",
+      "descricao": "top-15 da tabela 1; demais -> 'Outros'; NULL -> 'Não informado'"
+    },
+    {
+      "coluna": "nivel_senioridade_agrupada",
+      "tipo": "string",
+      "descricao": "Júnior/Pleno/Sênior; NULL -> 'Não informado'; 'Todos' = agregado sem quebra por senioridade"
+    },
+    {
+      "coluna": "regiao_onde_mora",
+      "tipo": "string",
+      "descricao": "região; NULL -> 'Não informado'; 'Todas' = agregado sem quebra por região"
+    },
+    {
+      "coluna": "ano_pesquisa",
+      "tipo": "int",
+      "descricao": "edição (partição)"
+    },
+    {
+      "coluna": "contagem",
+      "tipo": "bigint",
+      "descricao": "respondentes com salário informado na célula"
+    },
+    {
+      "coluna": "salario_medio",
+      "tipo": "double",
+      "descricao": "média de faixa_salarial_ponto_medio; NULL quando alguma dimensão é 'Não informado'"
+    },
+    {
+      "coluna": "salario_mediana",
+      "tipo": "double",
+      "descricao": "percentile_approx(faixa_salarial_ponto_medio, 0.5); NULL idem"
+    },
+    {
+      "coluna": "amostra_baixa",
+      "tipo": "boolean",
+      "descricao": "contagem < 30"
+    }
+  ],
+  "regras": {
+    "filtro": "faixa_salarial_ponto_medio IS NOT NULL antes de agregar (NULL não entra como zero)",
+    "top_n": "cargo_atual_agrupado usa o top-15 calculado em tb_gold_perfil_mercado (metadados), não recalcula",
+    "especiais": "células com 'Não informado' em qualquer dimensão: contagem preenchida, salário NULL",
+    "agregados": "linhas adicionais com regiao_onde_mora='Todas' e/ou nivel_senioridade_agrupada='Todos' (células robustas); SUM(contagem) por ano deve ser feita só sobre o cruzamento completo (regiao<>'Todas' AND nivel<>'Todos')",
+    "amostra_baixa": "contagem < 30"
+  },
+  "validacao_esperada": "SUM(contagem) por ano, só no cruzamento completo, = COUNT(faixa_salarial_ponto_medio) na Silver por ano",
+  "top_cargos_reaproveitados": [
+    "Analista de Dados/Data Analyst",
+    "Cientista de Dados/Data Scientist",
+    "Engenheiro de Dados/Arquiteto de Dados",
+    "Analista de BI/BI Analyst",
+    "Outra Opção",
+    "Analista de Negócios/Business Analyst",
+    "Analytics Engineer",
+    "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+    "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+    "Analista de Suporte/Analista Técnico",
+    "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+    "Outras Engenharias (não inclui dev)",
+    "Professor/Pesquisador",
+    "Estatístico"
+  ],
+  "agregados": [
+    {
+      "regiao_onde_mora": "Todas"
+    },
+    {
+      "nivel_senioridade_agrupada": "Todos"
+    },
+    {
+      "regiao_onde_mora": "Todas",
+      "nivel_senioridade_agrupada": "Todos"
+    }
+  ],
+  "drift": [],
+  "qtd_linhas_cruzamento_completo": 616,
+  "qtd_linhas_agregados": 432,
+  "amostra_baixa_casos": [
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 1
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 2
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 3
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Não informado",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Não informado",
+      "nivel_senioridade_agrupada": "Não informado",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 4
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 5
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 6
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Não informado",
+      "nivel_senioridade_agrupada": "Não informado",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Não informado",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 7
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 8
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 9
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2024,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 10
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Não informado",
+      "nivel_senioridade_agrupada": "Não informado",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Não informado",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Norte",
+      "ano_pesquisa": 2023,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 11
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 12
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 12
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 12
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 12
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 12
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 12
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 12
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 12
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 12
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 12
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 12
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 12
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 12
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 12
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 13
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 13
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 13
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 13
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 13
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 13
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 13
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 13
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 13
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 13
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 13
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 13
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 13
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 13
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 13
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 14
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 14
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 14
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 14
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 14
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 14
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 14
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 14
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 14
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 14
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 14
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 15
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 15
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 15
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 15
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 15
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 15
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 15
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 15
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 15
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 15
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 15
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 15
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 15
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 15
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 15
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 16
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 16
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 16
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 16
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 16
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 16
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 16
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 16
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 16
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 16
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 17
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 17
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 17
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 17
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 17
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 17
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 17
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 17
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 17
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 17
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 17
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 17
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 17
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 17
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 18
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 18
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 18
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 18
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 18
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 18
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 18
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 18
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 18
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 18
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 18
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 18
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 18
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2025,
+      "contagem": 18
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 19
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 19
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 19
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 19
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 19
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 19
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 19
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 19
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 20
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 20
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 20
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 20
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 20
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 20
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 20
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 20
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 20
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 20
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 21
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 21
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 21
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 21
+    },
+    {
+      "cargo_atual_agrupado": "Estatístico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 21
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2024,
+      "contagem": 21
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 21
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 21
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 21
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 22
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 22
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 22
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 22
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 22
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 22
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 22
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 22
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 23
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2024,
+      "contagem": 23
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 23
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 23
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2023,
+      "contagem": 23
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 23
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 23
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 24
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 24
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Centro-oeste",
+      "ano_pesquisa": 2025,
+      "contagem": 24
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 24
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 24
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 24
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 24
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 24
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 24
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 25
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 25
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 25
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 26
+    },
+    {
+      "cargo_atual_agrupado": "Não informado",
+      "nivel_senioridade_agrupada": "Não informado",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 26
+    },
+    {
+      "cargo_atual_agrupado": "Não informado",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 26
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 26
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 26
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 26
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 26
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 27
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 27
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 27
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 27
+    },
+    {
+      "cargo_atual_agrupado": "Cientista de Dados/Data Scientist",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2024,
+      "contagem": 27
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 27
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Dados/Arquiteto de Dados",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Não informado",
+      "ano_pesquisa": 2024,
+      "contagem": 28
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Dados/Data Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2025,
+      "contagem": 28
+    },
+    {
+      "cargo_atual_agrupado": "Professor/Pesquisador",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 28
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 28
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 28
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2023,
+      "contagem": 28
+    },
+    {
+      "cargo_atual_agrupado": "Outra Opção",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Nordeste",
+      "ano_pesquisa": 2025,
+      "contagem": 28
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 29
+    },
+    {
+      "cargo_atual_agrupado": "Outras Engenharias (não inclui dev)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 29
+    },
+    {
+      "cargo_atual_agrupado": "Analista de BI/BI Analyst",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 29
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 29
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Negócios/Business Analyst",
+      "nivel_senioridade_agrupada": "Pleno",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 29
+    },
+    {
+      "cargo_atual_agrupado": "Desenvolvedor/ Engenheiro de Software/ Analista de Sistemas",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 29
+    },
+    {
+      "cargo_atual_agrupado": "Analytics Engineer",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2023,
+      "contagem": 29
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Júnior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2024,
+      "contagem": 29
+    },
+    {
+      "cargo_atual_agrupado": "Outros",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2023,
+      "contagem": 29
+    },
+    {
+      "cargo_atual_agrupado": "Engenheiro de Machine Learning/ML Engineer/AI Engineer",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2023,
+      "contagem": 29
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sul",
+      "ano_pesquisa": 2024,
+      "contagem": 29
+    },
+    {
+      "cargo_atual_agrupado": "Data Product Manager/ Product Manager (PM/APM/DPM/GPM/PO)",
+      "nivel_senioridade_agrupada": "Sênior",
+      "regiao_onde_mora": "Todas",
+      "ano_pesquisa": 2025,
+      "contagem": 29
+    },
+    {
+      "cargo_atual_agrupado": "Analista de Suporte/Analista Técnico",
+      "nivel_senioridade_agrupada": "Todos",
+      "regiao_onde_mora": "Sudeste",
+      "ano_pesquisa": 2025,
+      "contagem": 29
+    }
+  ],
+  "referencias": {
+    "respondentes_com_salario_por_ano": {
+      "2024": 4863,
+      "2025": 3228,
+      "2023": 4753
+    }
+  }
+}

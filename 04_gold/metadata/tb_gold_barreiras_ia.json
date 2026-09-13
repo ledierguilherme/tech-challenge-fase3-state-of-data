@@ -1,0 +1,66 @@
+{
+  "tabela": "workspace.tb_gold_barreiras_ia",
+  "location": "s3://614133392546-lab/data-output/gold/state-of-data/barreiras_ia/",
+  "origem": "workspace.tb_state_of_data_silver",
+  "gerado_em": "2026-09-13T04:30:50.919787+00:00",
+  "pergunta_respondida": "Quais barreiras impedem as empresas de adotar IA generativa e como mudam por edição?",
+  "particao": "ano_pesquisa",
+  "qtd_linhas": 27,
+  "schema": [
+    {
+      "coluna": "motivo",
+      "tipo": "string",
+      "descricao": "sufixo de ia_emp_motivo_* (casos_uso, alucinacao, regulamentacao, seguranca_privacidade, roi, dados_nao_prontos, expertise, alta_direcao, propriedade_intelectual)"
+    },
+    {
+      "coluna": "fonte",
+      "tipo": "string",
+      "descricao": "coluna da Silver"
+    },
+    {
+      "coluna": "ano_pesquisa",
+      "tipo": "int",
+      "descricao": "edição (partição)"
+    },
+    {
+      "coluna": "contagem_true",
+      "tipo": "bigint",
+      "descricao": "respondentes que marcaram o motivo"
+    },
+    {
+      "coluna": "total_respondentes",
+      "tipo": "bigint",
+      "descricao": "quem passou pela pergunta (não nulo em qualquer um dos 9 motivos) no ano"
+    },
+    {
+      "coluna": "percentual",
+      "tipo": "double",
+      "descricao": "contagem_true / total_respondentes"
+    },
+    {
+      "coluna": "amostra_baixa",
+      "tipo": "boolean",
+      "descricao": "contagem_true < 30"
+    }
+  ],
+  "regras": {
+    "total": "igual para os 9 motivos do mesmo ano (quem viu a pergunta)"
+  },
+  "validacao_esperada": "ia_emp_motivo_casos_uso true 303/334/188; total_respondentes 823/974/587 (guarda-chuva não nula na Bronze)",
+  "drift": [],
+  "amostra_baixa_casos": [],
+  "referencias": {
+    "ia_emp_motivo_casos_uso|2024": {
+      "contagem_true": 334,
+      "total_respondentes": 974
+    },
+    "ia_emp_motivo_casos_uso|2025": {
+      "contagem_true": 188,
+      "total_respondentes": 587
+    },
+    "ia_emp_motivo_casos_uso|2023": {
+      "contagem_true": 303,
+      "total_respondentes": 823
+    }
+  }
+}

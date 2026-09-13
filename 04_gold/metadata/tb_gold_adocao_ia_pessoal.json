@@ -1,0 +1,86 @@
+{
+  "tabela": "workspace.tb_gold_adocao_ia_pessoal",
+  "location": "s3://614133392546-lab/data-output/gold/state-of-data/adocao_ia_pessoal/",
+  "origem": "workspace.tb_state_of_data_silver",
+  "gerado_em": "2026-09-13T04:28:39.311210+00:00",
+  "particao": "ano_pesquisa",
+  "qtd_linhas": 48,
+  "decisao_2_tabelas": "As partes (a) e (b) têm chaves e métricas diferentes (item × contagem_true/total vs senioridade × nivel_uso × contagem/percentual); um union exigiria colunas NULL-padded e confundiria consultas no Athena. Duas tabelas no mesmo job é mais simples.",
+  "pergunta_respondida": "Qual o nível de uso pessoal de IA generativa (não usa / gratuito-copilot / paga / empresa paga) por senioridade e edição?",
+  "schema": [
+    {
+      "coluna": "nivel_senioridade_agrupada",
+      "tipo": "string",
+      "descricao": "Júnior/Pleno/Sênior; NULL -> 'Não informado'"
+    },
+    {
+      "coluna": "nivel_uso",
+      "tipo": "string",
+      "descricao": "ia_pessoal_nivel_uso; NULL -> 'Não informado'"
+    },
+    {
+      "coluna": "ano_pesquisa",
+      "tipo": "int",
+      "descricao": "edição (partição)"
+    },
+    {
+      "coluna": "contagem",
+      "tipo": "bigint",
+      "descricao": "respondentes na célula"
+    },
+    {
+      "coluna": "percentual",
+      "tipo": "double",
+      "descricao": "contagem / soma dos níveis regulares dentro de (senioridade, ano); NULL para 'Não informado'"
+    },
+    {
+      "coluna": "amostra_baixa",
+      "tipo": "boolean",
+      "descricao": "contagem < 30"
+    }
+  ],
+  "regras": {
+    "denominador": "exclui nivel_uso 'Não informado'; senioridade 'Não informado' é grupo regular"
+  },
+  "validacao_esperada": "respondentes com nivel_uso por ano = 3772/3619/2106",
+  "drift": [],
+  "amostra_baixa_casos": [
+    {
+      "nivel_senioridade_agrupada": "Júnior",
+      "nivel_uso": "Não usa",
+      "ano_pesquisa": 2025,
+      "contagem": 11
+    },
+    {
+      "nivel_senioridade_agrupada": "Pleno",
+      "nivel_uso": "Não usa",
+      "ano_pesquisa": 2025,
+      "contagem": 12
+    },
+    {
+      "nivel_senioridade_agrupada": "Sênior",
+      "nivel_uso": "Não usa",
+      "ano_pesquisa": 2025,
+      "contagem": 16
+    },
+    {
+      "nivel_senioridade_agrupada": "Sênior",
+      "nivel_uso": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 26
+    },
+    {
+      "nivel_senioridade_agrupada": "Júnior",
+      "nivel_uso": "Não informado",
+      "ano_pesquisa": 2023,
+      "contagem": 26
+    }
+  ],
+  "referencias": {
+    "respondentes_nivel_uso_por_ano": {
+      "2024": 3619,
+      "2025": 2106,
+      "2023": 3772
+    }
+  }
+}

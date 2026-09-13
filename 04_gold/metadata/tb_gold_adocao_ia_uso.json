@@ -1,0 +1,103 @@
+{
+  "tabela": "workspace.tb_gold_adocao_ia_uso",
+  "location": "s3://614133392546-lab/data-output/gold/state-of-data/adocao_ia_uso/",
+  "origem": "workspace.tb_state_of_data_silver",
+  "gerado_em": "2026-09-13T04:28:19.303454+00:00",
+  "particao": "ano_pesquisa",
+  "qtd_linhas": 48,
+  "decisao_2_tabelas": "As partes (a) e (b) têm chaves e métricas diferentes (item × contagem_true/total vs senioridade × nivel_uso × contagem/percentual); um union exigiria colunas NULL-padded e confundiria consultas no Athena. Duas tabelas no mesmo job é mais simples.",
+  "pergunta_respondida": "Como as empresas usam IA generativa (visão da empresa e do indivíduo) e como isso evolui por edição?",
+  "schema": [
+    {
+      "coluna": "bloco",
+      "tipo": "string",
+      "descricao": "'empresa' (ia_emp_*) ou 'individuo' (ia_ind_*)"
+    },
+    {
+      "coluna": "item",
+      "tipo": "string",
+      "descricao": "sufixo da coluna (uso_independente, direcionamento_central, copilots_dev, ...)"
+    },
+    {
+      "coluna": "fonte",
+      "tipo": "string",
+      "descricao": "coluna da Silver"
+    },
+    {
+      "coluna": "ano_pesquisa",
+      "tipo": "int",
+      "descricao": "edição (partição)"
+    },
+    {
+      "coluna": "contagem_true",
+      "tipo": "bigint",
+      "descricao": "respondentes com true"
+    },
+    {
+      "coluna": "total_respondentes",
+      "tipo": "bigint",
+      "descricao": "não nulos na coluna/ano (quem passou pela pergunta)"
+    },
+    {
+      "coluna": "percentual",
+      "tipo": "double",
+      "descricao": "contagem_true / total_respondentes"
+    },
+    {
+      "coluna": "amostra_baixa",
+      "tipo": "boolean",
+      "descricao": "contagem_true < 30"
+    }
+  ],
+  "regras": {
+    "excluidos": "ia_emp_motivo_* (tb_gold_barreiras_ia) e ia_emp_bons_resultados_llm (categórica)"
+  },
+  "validacao_esperada": "ia_emp_uso_independente true 303/395/312; ia_ind_uso_independente 1723/1811/1017; ia_ind_copilots_dev 578/948/685",
+  "drift": [],
+  "amostra_baixa_casos": [
+    {
+      "bloco": "empresa",
+      "item": "nao_sei_opinar",
+      "ano_pesquisa": 2025,
+      "contagem": 20
+    }
+  ],
+  "referencias": {
+    "ia_emp_uso_independente|2024": {
+      "contagem_true": 395,
+      "total_respondentes": 1000
+    },
+    "ia_emp_uso_independente|2025": {
+      "contagem_true": 312,
+      "total_respondentes": 616
+    },
+    "ia_emp_uso_independente|2023": {
+      "contagem_true": 303,
+      "total_respondentes": 862
+    },
+    "ia_ind_copilots_dev|2024": {
+      "contagem_true": 948,
+      "total_respondentes": 3619
+    },
+    "ia_ind_uso_independente|2024": {
+      "contagem_true": 1811,
+      "total_respondentes": 3619
+    },
+    "ia_ind_copilots_dev|2025": {
+      "contagem_true": 685,
+      "total_respondentes": 2106
+    },
+    "ia_ind_uso_independente|2025": {
+      "contagem_true": 1017,
+      "total_respondentes": 2106
+    },
+    "ia_ind_copilots_dev|2023": {
+      "contagem_true": 578,
+      "total_respondentes": 3772
+    },
+    "ia_ind_uso_independente|2023": {
+      "contagem_true": 1723,
+      "total_respondentes": 3772
+    }
+  }
+}

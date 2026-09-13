@@ -1,0 +1,31 @@
+# --- credenciais (nunca versionar, em nenhum nome)
+*credential*
+*credencia*
+.aws/
+*.pem
+.env
+.env.*
+
+# --- dados brutos e material de terceiros (não são do repositório)
+database/
+aulas/
+/*.pdf
+
+# --- saídas locais
+exports/
+*.log
+athena-results/
+
+# --- python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# --- sistema / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+~$*.pptx
